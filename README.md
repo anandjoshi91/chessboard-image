@@ -47,12 +47,32 @@ cbi.generate_image(start_fen, "start_position.png", size=400)
 # Generate from Black's perspective
 cbi.generate_image(start_fen, "start_position_black.png", size=400, player_pov="black")
 
+# Generate with coordinates shown
+cbi.generate_image(start_fen, "start_with_coords.png", size=400, show_coordinates=True)
+
 # Get image as bytes (useful for web APIs)
 image_bytes = cbi.generate_bytes(start_fen, size=300)
 
 # Get PIL Image object for further processing
-pil_image = cbi.generate_pil(start_fen, size=500, player_pov="black")
+pil_image = cbi.generate_pil(start_fen, size=500, player_pov="black", show_coordinates=True)
 pil_image.show()  # Display the image
+```
+
+### Board Coordinates
+
+You can add file (a-h) and rank (1-8) labels to the board:
+
+```python
+# Show coordinates with default white perspective
+cbi.generate_image(fen, "board_with_coords.png", show_coordinates=True)
+
+# Show coordinates with black perspective
+# Files: h-a (left to right), Ranks: 8-1 (bottom to top)
+cbi.generate_image(fen, "board_black_coords.png", player_pov="black", show_coordinates=True)
+
+# Coordinates automatically adjust for perspective:
+# White POV: files a-h, ranks 1-8 (bottom to top)
+# Black POV: files h-a, ranks 8-1 (bottom to top)
 ```
 
 ### Player Perspective
@@ -123,7 +143,7 @@ except cbi.ChessImageGeneratorError as e:
 
 ### Core Functions
 
-#### `generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
+#### `generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False)`
 
 Generate chess board image from FEN notation.
 
@@ -134,18 +154,19 @@ Generate chess board image from FEN notation.
 - `theme_file` (str, optional): Path to custom theme JSON file
 - `theme_name` (str): Theme name to use (default: "wikipedia")
 - `player_pov` (str): Player perspective - "white" or "black" (default: "white")
+- `show_coordinates` (bool): Show file/rank labels (default: False)
 
 **Returns:** `str` - Path to generated image file
 
 **Raises:** `InvalidFENError`, `ThemeNotFoundError`, `ChessImageGeneratorError`
 
-#### `generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
+#### `generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False)`
 
 Generate chess board image as bytes.
 
 **Returns:** `bytes` - PNG image data
 
-#### `generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
+#### `generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False)`
 
 Generate chess board as PIL Image object.
 
@@ -319,8 +340,9 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Changelog
 
-### 1.1.2
+### 1.1.3
 - Initial release
 - Support for FEN notation
 - Built-in 5 themes [alpha, wikipedia, uscf, wisteria, sakura]
 - Generate image from pov of black or white player
+- Add optional file and rank coordinates

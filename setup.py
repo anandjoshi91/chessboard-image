@@ -16,7 +16,7 @@ def get_version():
             if line.startswith('__version__'):
                 exec(line, version)
                 break
-    return version.get('__version__', '1.1.1')
+    return version.get('__version__', '1.1.3')
 
 setup(
     name='chessboard-image',

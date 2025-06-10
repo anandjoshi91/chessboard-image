@@ -1,0 +1,35 @@
+rm -rf dist/ build/ *.egg-info/
+python -m build
+twine upload dist/*
+
+
+
+# From your chessboard-image directory
+pip install -e .
+
+# Test white perspective (rank 1 at bottom)
+python -c "
+import chessboard_image as cbi
+cbi.generate_image('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'white_coords.png', show_coordinates=True)
+print('✓ Generated white_coords.png')
+"
+
+# Test black perspective (rank 8 at bottom)  
+python -c "
+import chessboard_image as cbi
+cbi.generate_image('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'black_coords.png', player_pov='black', show_coordinates=True)
+print('✓ Generated black_coords.png')
+"
+
+
+python -c "
+import chessboard_image as cbi
+cbi.generate_image('2qr2k1/6Pn/p4pQ1/1p3P2/2p1Bp1P/2P2P2/PP6/6RK w KQkq - 0 1', 'white_coords.png', show_coordinates=True)
+print('✓ Generated white_coords.png')
+"
+
+python -c "
+import chessboard_image as cbi
+cbi.generate_image('2qr2k1/6Pn/p4pQ1/1p3P2/2p1Bp1P/2P2P2/PP6/6RK w KQkq - 0 1', 'black_coords.png', player_pov='black', show_coordinates=True)
+print('✓ Generated black_coords.png')
+"

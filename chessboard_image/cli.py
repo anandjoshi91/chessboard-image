@@ -36,6 +36,8 @@ def main():
     gen_parser.add_argument('--theme-file', help='Custom theme file path')
     gen_parser.add_argument('-p', '--player-pov', choices=['white', 'black'], default='white', 
                           help='Player perspective (default: white)')
+    gen_parser.add_argument('-c', '--coordinates', action='store_true', 
+                          help='Show file/rank coordinates (a-h, 1-8)')
     
     # List themes command
     list_parser = subparsers.add_parser('themes', help='List available themes')
@@ -63,12 +65,15 @@ def main():
                 size=args.size,
                 theme_name=args.theme,
                 theme_file=args.theme_file,
-                player_pov=args.player_pov
+                player_pov=args.player_pov,
+                show_coordinates=args.coordinates
             )
             print(f"✓ Chess board image saved: {result_path}")
             print(f"  Theme: {args.theme}")
             print(f"  Size: {args.size}x{args.size}")
             print(f"  Perspective: {args.player_pov.title()}'s view")
+            if args.coordinates:
+                print(f"  Coordinates: Shown")
             
         elif args.command == 'themes':
             themes = list_themes(args.theme_file)
@@ -126,7 +131,8 @@ def show_examples():
     print("  chessboard-image info wikipedia")
     print("  chessboard-image generate 'FEN' -s 600 -t alpha")
     print("  chessboard-image generate 'FEN' -p black  # Black's perspective")
-    print("  chessboard-image generate 'FEN' --player-pov black -s 500")
+    print("  chessboard-image generate 'FEN' -c  # Show coordinates")
+    print("  chessboard-image generate 'FEN' --player-pov black --coordinates -s 500")
 
 
 if __name__ == '__main__':

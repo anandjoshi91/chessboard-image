@@ -112,6 +112,40 @@ class TestChessboardImage:
             image_bytes = generate_bytes(fen, size=100, theme_name=theme)
             assert len(image_bytes) > 0
     
+    def test_coordinates_feature(self):
+        """Test board coordinate generation."""
+        fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        
+        # Test without coordinates (default)
+        no_coords_bytes = generate_bytes(fen, size=100, show_coordinates=False)
+        assert len(no_coords_bytes) > 0
+        
+        # Test with coordinates
+        with_coords_bytes = generate_bytes(fen, size=100, show_coordinates=True)
+        assert len(with_coords_bytes) > 0
+        
+        # Images should be different (with coordinates should be larger)
+        assert no_coords_bytes != with_coords_bytes
+        
+        # Test coordinates with both perspectives
+        white_coords = generate_bytes(fen, size=100, player_pov="white", show_coordinates=True)
+        black_coords = generate_bytes(fen, size=100, player_pov="black", show_coordinates=True)
+        
+        # Should be different due to different perspective and coordinate labeling
+        assert white_coords != black_coords
+    
+    def test_coordinates_with_pil(self):
+        """Test coordinates with PIL Image output."""
+        fen = "8/8/8/8/8/8/8/4K2k w - - 0 1"
+        
+        # Without coordinates
+        img_no_coords = generate_pil(fen, size=100, show_coordinates=False)
+        assert img_no_coords.size == (100, 100)
+        
+        # With coordinates (should be larger due to margin)
+        img_with_coords = generate_pil(fen, size=100, show_coordinates=True)
+        assert img_with_coords.size == (140, 140)  # 100 + 2*20 margin
+    
     def test_player_perspective(self):
         """Test different player perspectives."""
         fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"

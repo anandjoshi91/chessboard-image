@@ -14,7 +14,7 @@ from pathlib import Path
 import tempfile
 import pkg_resources
 
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 __author__ = "Anand Joshi"
 __email__ = "anandhjoshi@outlook.com"
 
@@ -157,7 +157,7 @@ def parse_fen(fen):
         raise InvalidFENError(f"Failed to parse FEN: {e}")
 
 
-def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
+def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False):
     """
     Generate chess board image from FEN notation.
     
@@ -168,6 +168,7 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         theme_file (str, optional): Path to theme JSON file. If None, uses default.
         theme_name (str): Theme name to use (default: "wikipedia")
         player_pov (str): Player perspective - "white" or "black" (default: "white")
+        show_coordinates (bool): Show file/rank labels (default: False)
     
     Returns:
         str: Path to generated image file
@@ -193,11 +194,17 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
     
     # Reverse board perspective for black's view (flip board vertically)
     if player_pov == "black":
-        board = board[::-1]  # Reverse the rows to flip board perspective
+        board = board[::-1]  # Flip ranks (rows)
+        board = [row[::-1] for row in board]  # Flip files (columns) within each rank
     
     try:
-        # Create board image
-        img = Image.new('RGB', (size, size), 'white')
+        # Calculate dimensions with optional coordinate labels
+        coord_margin = 20 if show_coordinates else 0
+        total_size = size + (2 * coord_margin)
+        board_offset = coord_margin
+        
+        # Create board image with margin for coordinates
+        img = Image.new('RGB', (total_size, total_size), 'white')
         draw = ImageDraw.Draw(img)
         
         square_size = size // 8
@@ -208,8 +215,8 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         # Draw squares
         for row in range(8):
             for col in range(8):
-                x1 = col * square_size
-                y1 = row * square_size
+                x1 = board_offset + (col * square_size)
+                y1 = board_offset + (row * square_size)
                 x2 = x1 + square_size
                 y2 = y1 + square_size
                 
@@ -231,14 +238,52 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
                         # Resize piece to fit square
                         piece_img = piece_img.resize((square_size, square_size), Image.Resampling.LANCZOS)
                         
-                        x = col * square_size
-                        y = row * square_size
+                        x = board_offset + (col * square_size)
+                        y = board_offset + (row * square_size)
                         
                         # Paste with transparency if available
                         if piece_img.mode == 'RGBA':
                             img.paste(piece_img, (x, y), piece_img)
                         else:
                             img.paste(piece_img, (x, y))
+        
+        # Draw coordinates if requested
+        if show_coordinates:
+            try:
+                from PIL import ImageFont
+                # Try to use a system font, fall back to default if not available
+                try:
+                    font = ImageFont.truetype("arial.ttf", 14)
+                except:
+                    try:
+                        font = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 14)  # macOS
+                    except:
+                        try:
+                            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)  # Linux
+                        except:
+                            font = ImageFont.load_default()
+            except ImportError:
+                font = ImageFont.load_default()
+            
+            # Define coordinates based on player perspective
+            if player_pov == "white":
+                files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+                ranks = ['8', '7', '6', '5', '4', '3', '2', '1']  # 8 at top, 1 at bottom
+            else:  # black perspective
+                files = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+                ranks = ['1', '2', '3', '4', '5', '6', '7', '8']  # 1 at top, 8 at bottom
+            
+            # Draw file labels (a-h or h-a) - BOTTOM ONLY
+            for i, file_label in enumerate(files):
+                x = board_offset + (i * square_size) + (square_size // 2)
+                y_bottom = board_offset + size + 5
+                draw.text((x, y_bottom), file_label, fill='black', font=font, anchor='mt')
+            
+            # Draw rank labels (1-8 or 8-1) - LEFT ONLY
+            for i, rank_label in enumerate(ranks):
+                y = board_offset + (i * square_size) + (square_size // 2)
+                x_left = 5
+                draw.text((x_left, y), rank_label, fill='black', font=font, anchor='mm')
         
         # Save image
         img.save(output_path, 'PNG')
@@ -248,7 +293,7 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         raise ChessImageGeneratorError(f"Failed to generate image: {e}")
 
 
-def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
+def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False):
     """
     Generate chess board image as bytes.
     
@@ -258,11 +303,12 @@ def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", playe
         theme_file (str, optional): Path to theme JSON file
         theme_name (str): Theme name to use (default: "wikipedia")
         player_pov (str): Player perspective - "white" or "black" (default: "white")
+        show_coordinates (bool): Show file/rank labels (default: False)
     
     Returns:
         bytes: PNG image data
     """
-    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov)
+    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov, show_coordinates=show_coordinates)
     try:
         with open(image_path, 'rb') as f:
             return f.read()
@@ -270,7 +316,7 @@ def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", playe
         os.unlink(image_path)
 
 
-def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
+def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white", show_coordinates=False):
     """
     Generate chess board as PIL Image object.
     
@@ -280,11 +326,12 @@ def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_
         theme_file (str, optional): Path to theme JSON file
         theme_name (str): Theme name to use (default: "wikipedia")
         player_pov (str): Player perspective - "white" or "black" (default: "white")
+        show_coordinates (bool): Show file/rank labels (default: False)
     
     Returns:
         PIL.Image: Image object
     """
-    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov)
+    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov, show_coordinates=show_coordinates)
     try:
         return Image.open(image_path)
     finally:

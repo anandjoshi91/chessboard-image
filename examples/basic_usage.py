@@ -44,8 +44,19 @@ def main():
     image_bytes = cbi.generate_bytes(endgame_fen, size=150, player_pov="black")
     print(f"✓ Generated {len(image_bytes)} bytes of PNG data (Black's perspective)")
     
-    # Example 7: List available themes
-    print("\n7. Available themes:")
+    # Example 7: Generate with coordinates
+    print("\n7. Generating board with coordinates...")
+    cbi.generate_image(start_fen, "starting_position_coords.png", size=400, show_coordinates=True)
+    print("✓ Saved: starting_position_coords.png (with file/rank labels)")
+    
+    # Example 8: Black perspective with coordinates
+    print("\n8. Generating Black's perspective with coordinates...")
+    cbi.generate_image(start_fen, "starting_position_black_coords.png", size=400, 
+                      player_pov="black", show_coordinates=True)
+    print("✓ Saved: starting_position_black_coords.png (Black POV with coordinates)")
+    
+    # Example 9: List available themes
+    print("\n9. Available themes:")
     themes = cbi.list_themes()
     for theme in themes:
         info = cbi.get_theme_info(theme)
