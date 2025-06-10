@@ -41,15 +41,34 @@ import chessboard_image as cbi
 # Starting position
 start_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
-# Generate and save image
+# Generate and save image (White's perspective - default)
 cbi.generate_image(start_fen, "start_position.png", size=400)
+
+# Generate from Black's perspective
+cbi.generate_image(start_fen, "start_position_black.png", size=400, player_pov="black")
 
 # Get image as bytes (useful for web APIs)
 image_bytes = cbi.generate_bytes(start_fen, size=300)
 
 # Get PIL Image object for further processing
-pil_image = cbi.generate_pil(start_fen, size=500)
+pil_image = cbi.generate_pil(start_fen, size=500, player_pov="black")
 pil_image.show()  # Display the image
+```
+
+### Player Perspective
+
+By default, boards are generated from White's perspective (White pieces at bottom). You can generate from Black's perspective by setting `player_pov="black"`:
+
+```python
+# White's perspective (default)
+cbi.generate_image(fen, "white_view.png", player_pov="white")
+
+# Black's perspective (rotated 180°)
+cbi.generate_image(fen, "black_view.png", player_pov="black")
+
+# Works with all output formats
+black_bytes = cbi.generate_bytes(fen, player_pov="black")
+black_pil = cbi.generate_pil(fen, player_pov="black")
 ```
 
 ### Using Different Themes
@@ -104,7 +123,7 @@ except cbi.ChessImageGeneratorError as e:
 
 ### Core Functions
 
-#### `generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia")`
+#### `generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
 
 Generate chess board image from FEN notation.
 
@@ -114,18 +133,19 @@ Generate chess board image from FEN notation.
 - `size` (int): Board size in pixels (default: 400)
 - `theme_file` (str, optional): Path to custom theme JSON file
 - `theme_name` (str): Theme name to use (default: "wikipedia")
+- `player_pov` (str): Player perspective - "white" or "black" (default: "white")
 
 **Returns:** `str` - Path to generated image file
 
 **Raises:** `InvalidFENError`, `ThemeNotFoundError`, `ChessImageGeneratorError`
 
-#### `generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia")`
+#### `generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
 
 Generate chess board image as bytes.
 
 **Returns:** `bytes` - PNG image data
 
-#### `generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia")`
+#### `generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white")`
 
 Generate chess board as PIL Image object.
 
@@ -202,9 +222,12 @@ Create custom themes by making a JSON file:
 ```python
 import chessboard_image as cbi
 
-# Scholar's Mate
+# Scholar's Mate from White's perspective
 scholars_mate = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
-cbi.generate_image(scholars_mate, "scholars_mate.png", size=500)
+cbi.generate_image(scholars_mate, "scholars_mate_white.png", size=500)
+
+# Same position from Black's perspective
+cbi.generate_image(scholars_mate, "scholars_mate_black.png", size=500, player_pov="black")
 
 # Sicilian Defense
 sicilian = "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2"
@@ -227,14 +250,16 @@ positions = [
 ]
 
 for name, fen in positions:
-    cbi.generate_image(fen, f"{name}.png", size=400, theme_name="alpha")
-    print(f"Generated {name}.png")
+    # Generate both perspectives
+    cbi.generate_image(fen, f"{name}_white.png", size=400, theme_name="alpha", player_pov="white")
+    cbi.generate_image(fen, f"{name}_black.png", size=400, theme_name="alpha", player_pov="black")
+    print(f"Generated {name} from both perspectives")
 ```
 
 ### Web API Integration
 
 ```python
-from flask import Flask, send_file
+from flask import Flask, send_file, request
 import chessboard_image as cbi
 import io
 
@@ -243,8 +268,13 @@ app = Flask(__name__)
 @app.route('/board/<path:fen>')
 def get_board_image(fen):
     try:
+        # Get optional query parameters
+        size = int(request.args.get('size', 400))
+        theme = request.args.get('theme', 'wikipedia')
+        player_pov = request.args.get('pov', 'white')
+        
         # Generate image bytes
-        image_bytes = cbi.generate_bytes(fen, size=400)
+        image_bytes = cbi.generate_bytes(fen, size=size, theme_name=theme, player_pov=player_pov)
         
         # Return as downloadable image
         return send_file(
@@ -293,3 +323,4 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 - Initial release
 - Support for FEN notation
 - Built-in 5 themes [alpha, wikipedia, uscf, wisteria, sakura]
+- Generate image from pov of black or white player

@@ -112,6 +112,31 @@ class TestChessboardImage:
             image_bytes = generate_bytes(fen, size=100, theme_name=theme)
             assert len(image_bytes) > 0
     
+    def test_player_perspective(self):
+        """Test different player perspectives."""
+        fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        
+        # Test white perspective (default)
+        white_bytes = generate_bytes(fen, size=100, player_pov="white")
+        assert len(white_bytes) > 0
+        
+        # Test black perspective
+        black_bytes = generate_bytes(fen, size=100, player_pov="black")
+        assert len(black_bytes) > 0
+        
+        # Images should be different (rotated)
+        assert white_bytes != black_bytes
+    
+    def test_invalid_player_pov(self):
+        """Test invalid player perspective values."""
+        fen = "8/8/8/8/8/8/8/4K2k w - - 0 1"
+        
+        with pytest.raises(ChessImageGeneratorError):
+            generate_bytes(fen, player_pov="invalid")
+        
+        with pytest.raises(ChessImageGeneratorError):
+            generate_bytes(fen, player_pov="red")
+    
     def test_complex_position(self):
         """Test complex chess position."""
         # Position from famous game

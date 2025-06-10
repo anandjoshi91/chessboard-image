@@ -157,7 +157,7 @@ def parse_fen(fen):
         raise InvalidFENError(f"Failed to parse FEN: {e}")
 
 
-def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia"):
+def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
     """
     Generate chess board image from FEN notation.
     
@@ -167,6 +167,7 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         size (int): Board size in pixels (default: 400)
         theme_file (str, optional): Path to theme JSON file. If None, uses default.
         theme_name (str): Theme name to use (default: "wikipedia")
+        player_pov (str): Player perspective - "white" or "black" (default: "white")
     
     Returns:
         str: Path to generated image file
@@ -176,6 +177,10 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         ThemeNotFoundError: If theme not found
         ChessImageGeneratorError: If image generation fails
     """
+    # Validate player_pov
+    if player_pov not in ["white", "black"]:
+        raise ChessImageGeneratorError(f"player_pov must be 'white' or 'black', got '{player_pov}'")
+    
     # Load theme
     theme = load_theme(theme_file, theme_name)
     
@@ -231,6 +236,10 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
                         else:
                             img.paste(piece_img, (x, y))
         
+        # Rotate image if viewing from black's perspective
+        if player_pov == "black":
+            img = img.rotate(180)
+        
         # Save image
         img.save(output_path, 'PNG')
         return output_path
@@ -239,7 +248,7 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
         raise ChessImageGeneratorError(f"Failed to generate image: {e}")
 
 
-def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia"):
+def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
     """
     Generate chess board image as bytes.
     
@@ -248,11 +257,12 @@ def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia"):
         size (int): Board size in pixels (default: 400)
         theme_file (str, optional): Path to theme JSON file
         theme_name (str): Theme name to use (default: "wikipedia")
+        player_pov (str): Player perspective - "white" or "black" (default: "white")
     
     Returns:
         bytes: PNG image data
     """
-    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name)
+    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov)
     try:
         with open(image_path, 'rb') as f:
             return f.read()
@@ -260,7 +270,7 @@ def generate_bytes(fen, size=400, theme_file=None, theme_name="wikipedia"):
         os.unlink(image_path)
 
 
-def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia"):
+def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia", player_pov="white"):
     """
     Generate chess board as PIL Image object.
     
@@ -269,11 +279,12 @@ def generate_pil(fen, size=400, theme_file=None, theme_name="wikipedia"):
         size (int): Board size in pixels (default: 400)
         theme_file (str, optional): Path to theme JSON file
         theme_name (str): Theme name to use (default: "wikipedia")
+        player_pov (str): Player perspective - "white" or "black" (default: "white")
     
     Returns:
         PIL.Image: Image object
     """
-    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name)
+    image_path = generate_image(fen, size=size, theme_file=theme_file, theme_name=theme_name, player_pov=player_pov)
     try:
         return Image.open(image_path)
     finally:
