@@ -319,7 +319,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Changelog
 
-### 1.0.0
+### 1.1.0
 - Initial release
 - Support for FEN notation
 - Built-in 5 themes [alpha, wikipedia, uscf, wisteria, sakura]

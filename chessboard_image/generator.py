@@ -14,9 +14,9 @@ from pathlib import Path
 import tempfile
 import pkg_resources
 
-__version__ = "1.0.0"
-__author__ = "Your Name"
-__email__ = "your.email@example.com"
+__version__ = "1.1.0"
+__author__ = "Anand Joshi"
+__email__ = "anandhjoshi@outlook.com
 
 # Chess piece mapping
 PIECE_MAP = {
