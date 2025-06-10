@@ -16,7 +16,7 @@ import pkg_resources
 
 __version__ = "1.1.0"
 __author__ = "Anand Joshi"
-__email__ = "anandhjoshi@outlook.com
+__email__ = "anandhjoshi@outlook.com"
 
 # Chess piece mapping
 PIECE_MAP = {
