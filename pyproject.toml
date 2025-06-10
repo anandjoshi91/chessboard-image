@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chessboard-image"
+authors = [
+    {name = "Anand Joshi", email = "anandhjoshi@outlook.com"},
+]
+description = "Generate beautiful chess board images from FEN notation"
+readme = "README.md"
+license = {text = "MIT"}
+keywords = ["chess", "fen", "board", "image", "generator", "diagram", "visualization"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Games/Entertainment :: Board Games",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "Pillow>=8.0.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/anandjoshi91/chessboard-image"
+Documentation = "https://github.com/anandjoshi91/chessboard-image#readme"
+Repository = "https://github.com/anandjoshi91/chessboard-image.git"
+"Bug Reports" = "https://github.com/anandjoshi91/chessboard-image/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.8",
+    "mypy>=0.800",
+]
+test = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+]
+
+[project.scripts]
+chessboard-image = "chessboard_image.cli:main"
+
+[tool.setuptools]
+packages = ["chessboard_image"]
+
+[tool.setuptools.package-data]
+chessboard_image = ["theme.json", "themes/*.json"]
+
+[tool.setuptools_scm]
+write_to = "chessboard_image/_version.py"
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=chessboard_image --cov-report=html --cov-report=term-missing"
