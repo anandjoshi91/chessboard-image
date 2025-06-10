@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -61,9 +61,6 @@ packages = ["chessboard_image"]
 
 [tool.setuptools.package-data]
 chessboard_image = ["theme.json", "themes/*.json"]
-
-[tool.setuptools_scm]
-write_to = "chessboard_image/_version.py"
 
 [tool.black]
 line-length = 100
