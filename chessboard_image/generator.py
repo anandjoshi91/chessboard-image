@@ -14,7 +14,7 @@ from pathlib import Path
 import tempfile
 import pkg_resources
 
-__version__ = "1.1.0"
+__version__ = "1.1.2"
 __author__ = "Anand Joshi"
 __email__ = "anandhjoshi@outlook.com"
 
@@ -191,6 +191,10 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
     # Parse FEN
     board = parse_fen(fen)
     
+    # Reverse board perspective for black's view (flip board vertically)
+    if player_pov == "black":
+        board = board[::-1]  # Reverse the rows to flip board perspective
+    
     try:
         # Create board image
         img = Image.new('RGB', (size, size), 'white')
@@ -235,10 +239,6 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
                             img.paste(piece_img, (x, y), piece_img)
                         else:
                             img.paste(piece_img, (x, y))
-        
-        # Rotate image if viewing from black's perspective
-        if player_pov == "black":
-            img = img.rotate(180)
         
         # Save image
         img.save(output_path, 'PNG')

@@ -57,13 +57,13 @@ pil_image.show()  # Display the image
 
 ### Player Perspective
 
-By default, boards are generated from White's perspective (White pieces at bottom). You can generate from Black's perspective by setting `player_pov="black"`:
+By default, boards are generated from White's perspective (White pieces at bottom). You can generate from Black's perspective by setting `player_pov="black"`, which flips the board so Black pieces appear at the bottom while keeping all pieces upright:
 
 ```python
-# White's perspective (default)
+# White's perspective (default) - White pieces at bottom
 cbi.generate_image(fen, "white_view.png", player_pov="white")
 
-# Black's perspective (rotated 180°)
+# Black's perspective - Black pieces at bottom, pieces stay upright
 cbi.generate_image(fen, "black_view.png", player_pov="black")
 
 # Works with all output formats
@@ -319,7 +319,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Changelog
 
-### 1.1.0
+### 1.1.2
 - Initial release
 - Support for FEN notation
 - Built-in 5 themes [alpha, wikipedia, uscf, wisteria, sakura]

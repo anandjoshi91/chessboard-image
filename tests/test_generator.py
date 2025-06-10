@@ -120,11 +120,11 @@ class TestChessboardImage:
         white_bytes = generate_bytes(fen, size=100, player_pov="white")
         assert len(white_bytes) > 0
         
-        # Test black perspective
+        # Test black perspective (flipped board)
         black_bytes = generate_bytes(fen, size=100, player_pov="black")
         assert len(black_bytes) > 0
         
-        # Images should be different (rotated)
+        # Images should be different (board is flipped)
         assert white_bytes != black_bytes
     
     def test_invalid_player_pov(self):

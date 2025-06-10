@@ -17,10 +17,10 @@ def main():
     cbi.generate_image(start_fen, "starting_position_white.png", size=400)
     print("✓ Saved: starting_position_white.png")
     
-    # Example 2: Starting position from Black's perspective
-    print("\n2. Generating starting position (Black's perspective)...")
+    # Example 2: Starting position from Black's perspective (flipped board)
+    print("\n2. Generating starting position (Black's perspective - flipped board)...")
     cbi.generate_image(start_fen, "starting_position_black.png", size=400, player_pov="black")
-    print("✓ Saved: starting_position_black.png")
+    print("✓ Saved: starting_position_black.png (Black pieces at bottom, pieces stay upright)")
     
     # Example 3: Famous opening - Sicilian Defense
     print("\n3. Generating Sicilian Defense...")
