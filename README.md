@@ -170,7 +170,7 @@ Create a JSON file with base64-encoded pieces:
       "wN": ["data:image/png;base64,..."], "wP": ["data:image/png;base64,..."],
       "bK": ["data:image/png;base64,..."], "bQ": ["data:image/png;base64,..."],
       "bR": ["data:image/png;base64,..."], "bB": ["data:image/png;base64,..."],
-      "bN": ["data:image/png;base64,..."], "bP": ["data:image/png;base64,...]
+      "bN": ["data:image/png;base64,..."], "bP": ["data:image/png;base64,..."]
     },
     "board": ["#F0D9B5", "#B58863"]
   }
