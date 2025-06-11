@@ -59,7 +59,7 @@ def generate_position_examples():
         # Famous positions
         {
             "name": "scholars_mate",
-            "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+            "fen": "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 1",
             "size": 400,
             "show_coordinates": True,
             "description": "Scholar's Mate"
@@ -73,7 +73,7 @@ def generate_position_examples():
         },
         {
             "name": "endgame_position",
-            "fen": "8/1B6/8/8/8/8/1K3Qqr/7k w KQkq - 0 1",
+            "fen": "8/1p1b4/p7/3ppk2/6p1/2P4p/PP3B1K/5B2 b - - 0 1",
             "size": 400,
             "player_pov": "black",
             "show_coordinates": True,

@@ -107,11 +107,11 @@ chessboard-image generate "fen_string" -o board.png -s 600 -t alpha -p black -c
 import chessboard_image as cbi
 
 # Scholar's Mate
-scholars_mate = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+scholars_mate = "r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 1"
 cbi.generate_image(scholars_mate, "scholars_mate.png", size=500)
 
 # Endgame
-endgame = "8/1B6/8/8/8/8/1K3Qqr/7k w KQkq - 0 1"
+endgame = "8/1p1b4/p7/3ppk2/6p1/2P4p/PP3B1K/5B2 b - - 0 1"
 cbi.generate_image(endgame, "endgame.png", player_pov="black", show_coordinates=True)
 
 # Sicilian Defense
@@ -205,7 +205,7 @@ python -m pytest tests/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
 
