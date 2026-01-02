@@ -14,7 +14,7 @@ from pathlib import Path
 import tempfile
 import pkg_resources
 
-__version__ = "1.1.4"
+__version__ = "1.1.5"
 __author__ = "Anand Joshi"
 __email__ = "anandhjoshi@outlook.com"
 

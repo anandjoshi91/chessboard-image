@@ -209,6 +209,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Changelog
 
+### 1.1.5
+- Updated USCF theme with improved piece designs
+
 ### 1.1.4
 - Fixed transparency handling for grayscale piece images (LA mode)
 - Now supports RGBA, LA, PA and any image mode with alpha channel
