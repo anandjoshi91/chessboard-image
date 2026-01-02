@@ -61,6 +61,13 @@ def main():
     for theme in themes:
         info = cbi.get_theme_info(theme)
         print(f"   - {theme}: {info['board_colors']} ({info['piece_count']} pieces)")
+
+    # Example 10: Using a different theme (maestro if available)
+    if 'maestro' in themes:
+        print("\n10. Generating with maestro theme...")
+        cbi.generate_image(start_fen, "starting_position_maestro.png",
+                          size=400, theme_name="maestro", show_coordinates=True)
+        print("✓ Saved: starting_position_maestro.png (with maestro theme)")
     
     print("\n" + "=" * 40)
     print("All examples completed successfully!")

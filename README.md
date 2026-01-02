@@ -65,15 +65,15 @@ image_bytes = cbi.generate_bytes(fen)
 
 ## Themes
 
-Built-in themes: `alpha`, `wikipedia`, `uscf`, `wisteria`, `sakura`
+Built-in themes: `alpha`, `wikipedia`, `uscf`, `wisteria`, `sakura`, `maestro`
 
 | Wikipedia | Alpha | USCF |
 |:---:|:---:|:---:|
 | ![Wikipedia](examples/images/theme_wikipedia.png) | ![Alpha](examples/images/theme_alpha.png) | ![USCF](examples/images/theme_uscf.png) |
 
-| Wisteria | Sakura |
-|:---:|:---:|
-| ![Wisteria](examples/images/theme_wisteria.png) | ![Sakura](examples/images/theme_sakura.png) |
+| Wisteria | Sakura | Maestro |
+|:---:|:---:|:---:|
+| ![Wisteria](examples/images/theme_wisteria.png) | ![Sakura](examples/images/theme_sakura.png) | ![Maestro](examples/images/theme_maestro.png) |
 
 ```python
 # List available themes
@@ -208,6 +208,12 @@ python -m pytest tests/
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### 1.1.4
+- Fixed transparency handling for grayscale piece images (LA mode)
+- Now supports RGBA, LA, PA and any image mode with alpha channel
+- Fixes issue where pieces with LA mode showed black backgrounds
+- Added maestro theme (6 built-in themes total)
 
 ### 1.1.3
 - Initial release

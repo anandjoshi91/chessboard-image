@@ -14,7 +14,7 @@ from pathlib import Path
 import tempfile
 import pkg_resources
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 __author__ = "Anand Joshi"
 __email__ = "anandhjoshi@outlook.com"
 
@@ -240,9 +240,9 @@ def generate_image(fen, output_path=None, size=400, theme_file=None, theme_name=
                         
                         x = board_offset + (col * square_size)
                         y = board_offset + (row * square_size)
-                        
+
                         # Paste with transparency if available
-                        if piece_img.mode == 'RGBA':
+                        if piece_img.mode in ('RGBA', 'LA', 'PA') or 'A' in piece_img.mode:
                             img.paste(piece_img, (x, y), piece_img)
                         else:
                             img.paste(piece_img, (x, y))

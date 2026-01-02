@@ -72,11 +72,12 @@ class TestThemes:
     def test_list_themes(self):
         """Test listing available themes."""
         themes = list_themes()
-        
+
         assert isinstance(themes, list)
-        assert len(themes) > 0
+        assert len(themes) >= 6  # At least 6 built-in themes
         assert 'wikipedia' in themes
-        
+        assert 'maestro' in themes  # New theme added in 1.1.4
+
         # All theme names should be strings
         for theme in themes:
             assert isinstance(theme, str)
@@ -241,6 +242,51 @@ class TestThemes:
             
             # All themes should have exactly 2 board colors
             assert len(theme['board']) == 2, f"Theme {theme_name} should have exactly 2 board colors"
+
+    def test_maestro_theme_exists(self):
+        """Test that maestro theme exists and is properly configured."""
+        themes = list_themes()
+        assert 'maestro' in themes, "Maestro theme should be available"
+
+        # Load maestro theme
+        theme = load_theme(theme_name='maestro')
+        assert isinstance(theme, dict)
+        assert 'pieces' in theme
+        assert 'board' in theme
+
+        # Check theme info
+        info = get_theme_info('maestro')
+        assert info['name'] == 'maestro'
+        assert info['piece_count'] == 12
+
+    def test_transparency_support_all_modes(self):
+        """Test that transparency works for different image modes (RGBA, LA, PA)."""
+        from PIL import Image
+
+        # Test with maestro theme which has LA mode pieces
+        fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+        with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp:
+            try:
+                output_path = generate_image(
+                    fen,
+                    tmp.name,
+                    size=400,
+                    theme_name='maestro'
+                )
+
+                # Image should be generated successfully
+                assert os.path.exists(output_path)
+                assert os.path.getsize(output_path) > 0
+
+                # Open and verify the image doesn't have black backgrounds
+                img = Image.open(output_path)
+                assert img.mode == 'RGB'
+                assert img.size == (400, 400)
+
+            finally:
+                if os.path.exists(tmp.name):
+                    os.unlink(tmp.name)
 
 
 if __name__ == "__main__":
