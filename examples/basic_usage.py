@@ -68,7 +68,14 @@ def main():
         cbi.generate_image(start_fen, "starting_position_maestro.png",
                           size=400, theme_name="maestro", show_coordinates=True)
         print("✓ Saved: starting_position_maestro.png (with maestro theme)")
-    
+
+    # Example 11: Using the symbol theme (lichess-style green/cream board)
+    if 'symbol' in themes:
+        print("\n11. Generating with symbol theme...")
+        cbi.generate_image(start_fen, "starting_position_symbol.png",
+                          size=400, theme_name="symbol", show_coordinates=True)
+        print("✓ Saved: starting_position_symbol.png (with symbol theme)")
+
     print("\n" + "=" * 40)
     print("All examples completed successfully!")
     print("Check the generated PNG files in the current directory.")

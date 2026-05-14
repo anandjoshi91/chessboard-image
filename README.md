@@ -65,7 +65,7 @@ image_bytes = cbi.generate_bytes(fen)
 
 ## Themes
 
-Built-in themes: `alpha`, `wikipedia`, `uscf`, `wisteria`, `sakura`, `maestro`
+Built-in themes: `alpha`, `wikipedia`, `uscf`, `wisteria`, `sakura`, `maestro`, `symbol`
 
 | Wikipedia | Alpha | USCF |
 |:---:|:---:|:---:|
@@ -75,12 +75,19 @@ Built-in themes: `alpha`, `wikipedia`, `uscf`, `wisteria`, `sakura`, `maestro`
 |:---:|:---:|:---:|
 | ![Wisteria](examples/images/theme_wisteria.png) | ![Sakura](examples/images/theme_sakura.png) | ![Maestro](examples/images/theme_maestro.png) |
 
+| Symbol | | |
+|:---:|:---:|:---:|
+| ![Symbol](examples/images/theme_symbol.png) | | |
+
 ```python
 # List available themes
 themes = cbi.list_themes()
 
 # Use different theme
 cbi.generate_image(fen, "board.png", theme_name="alpha")
+
+# New theme: lichess-style green/cream board
+cbi.generate_image(fen, "board.png", theme_name="symbol")
 ```
 
 ## CLI Usage
@@ -208,6 +215,9 @@ python -m pytest tests/
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Changelog
+
+### 1.1.6
+- Added new theme: `symbol` (lichess-style green/cream board) — 7 built-in themes total
 
 ### 1.1.5
 - Updated USCF theme with improved piece designs
