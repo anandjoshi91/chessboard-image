@@ -12,7 +12,7 @@ import os
 from PIL import Image, ImageDraw
 from pathlib import Path
 import tempfile
-import pkg_resources
+from importlib.resources import files
 
 __version__ = "1.1.6"
 __author__ = "Anand Joshi"
@@ -43,7 +43,7 @@ class InvalidFENError(ChessImageGeneratorError):
 def get_default_theme_path():
     """Get path to default theme file."""
     try:
-        return pkg_resources.resource_filename(__name__, 'theme.json')
+        return str(files(__name__).joinpath('theme.json'))
     except:
         # Fallback for development
         return Path(__file__).parent / 'theme.json'
